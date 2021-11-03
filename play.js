@@ -1,18 +1,4 @@
-const net = require("net");
-
-const connect = function () {
-  const conn = net.createConnection({
-    host: "165.227.47.243",
-    port: 50541,
-  });
-
-  conn.setEncoding("utf8");
-
-  return conn;
-};
-
-console.log("connecting...");
- connect();
+// const net = require("net");
 
 // const connect = function () {
 //   const conn = net.createConnection({
@@ -20,40 +6,57 @@ console.log("connecting...");
 //     port: 50541,
 //   });
 
-// conn.setEncoding('utf8');
+//   conn.setEncoding("utf8");
 
-// conn.on('connect', () => {
-//   console.log("Connected to SERVER!");
-//   conn.write("Name: PVL");
-// });
-
-// conn.on('data', data => {
-//   console.log(data);
-// });
-
-// return conn()
+//   return conn;
 // };
 
+// console.log("connecting...");
+//  connect();
 
 
-// // const net = require("net");
 
-// // const connect = function() {
-// //   const conn = net.createConnection({
-// //     host: "165.227.47.243",
-// //     port: 50541
-// //   });
+const { UPKEY, LEFTKEY, DOWNKEY, RIGHTKEY } = require('./play.js');
 
-// //   conn.setEncoding('utf8');
+let connection;
 
-// // conn.on('connect', () => {
-// //   console.log("Connected to SERVER!");
-// //   conn.write("Name: Kude");
-// // });
+const setupInput = function(conn) {
+  connection = conn;
+  const stdin = process.stdin;
+  stdin.setRawMode(true);
+  stdin.setEncoding('utf8');
+  stdin.resume();
+  stdin.on('data', key => {
+    handleUserInput(key);
+  });
+  return stdin;
+};
 
-// // conn.on('data', data => {
-// //   console.log(data);
-// // });
+let func;
 
-// // return net;
-// // };
+const handleUserInput = (key) => {
+  const stdout = process.stdout;
+  const interval = function(key) {
+    func = setInterval(() => {
+      connection.write(key);
+    }, 100);
+  };
+
+  if (key === 'a') {
+    clearInterval(func);
+    interval(UPKEY);
+  }
+  if (key === 's') {
+    clearInterval(func);
+    interval(LEFTKEY);
+  }
+  if (key === 'd') {
+    clearInterval(func);
+    interval(DOWNKEY);
+  }
+  if (key === 'f') {
+    clearInterval(func);
+    interval(RIGHTKEY);
+  }
+};
+module.exports = { setupInput };
