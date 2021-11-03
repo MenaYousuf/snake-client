@@ -60,3 +60,11 @@ const handleUserInput = (key) => {
   }
 };
 module.exports = { setupInput };
+
+const { connect } = require("./client");
+const { setupInput } = require("./input");
+
+console.log("Connecting ...");
+connect();
+
+setupInput();
