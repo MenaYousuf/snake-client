@@ -1,5 +1,5 @@
 const net = require('./play');
-// const { IP, PORT } = require('./play');
+const { IP, PORT } = require('./play');
 
 const connect = function() {
   const conn = net.createConnection({
@@ -10,8 +10,8 @@ const connect = function() {
   conn.setEncoding('utf8');
 
   conn.on('connect', () => {
-    console.log("Connected to SERVER!");
-    conn.write("Name: Rumi");
+    console.log("Successfully connected to game server");
+    conn.write("Name: RUM");
   });
   
   conn.on('data', data => {
@@ -21,4 +21,4 @@ const connect = function() {
   return conn;
 };
 
-module.exports = { net };
+module.exports = { connect };
